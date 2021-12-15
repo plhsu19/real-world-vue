@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="icon-title">
     <span class="icon-wrapper" v-html="svg"></span>
     <slot></slot>
   </div>
@@ -33,6 +33,10 @@ export default {
 </script>
 
 <style scoped>
+.icon-title {
+  display: flex;
+}
+
 .icon-wrapper {
   display: inline-flex;
   align-items: center;
