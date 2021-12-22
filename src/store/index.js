@@ -1,39 +1,48 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import EventService from "@/services/EventService.js";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     user: {
-      id: 'abc123',
-      name: 'Adam Jahr',
+      id: "abc123",
+      name: "Adam Jahr",
     },
     categories: [
-      'sustainability', 'nature', 'animal welfare', 'housing', 'education', 'food', 'community'
+      "sustainability",
+      "nature",
+      "animal welfare",
+      "housing",
+      "education",
+      "food",
+      "community",
     ],
-    todos: [
-      { id: 1, text: '...', done: true },
-      { id: 2, text: '...', done: false },
-      { id: 3, text: '...', done: true },
-      { id: 4, text: '...', done: false }
-    ],
+    events: [],
   },
-  mutations: {},
-  actions: {},
-  getters: {
-    catLength: (state) => {
-      return state.categories.length;
+  mutations: {
+    SET_EVENT(state, events) {
+      state.events = events;
     },
-    doneTodos: (state) => {
-      return state.todos.filter(todo => todo.done);
+    ADD_EVENT(state, event) {
+      state.events.push(event);
     },
-    activeTodosCount: (state, getters) => {
-      return state.todos.length - getters.doneTodos.length;
-    },
-    getTodoById: (state) => (id) => {
-      return state.todos.find((todo) => todo.id === id)
-    }
   },
-  modules: {},
+  actions: {
+    fetchEvents({ commit }, {perPage, page}) {
+      EventService.getEvents(perPage, page)
+        .then((response) => {
+          commit("SET_EVENT", response.data); // <--- set the events data using mutation
+        })
+        .catch((err) => {
+          console.log("There was an error: ", err.response);
+        });
+    },
+    createEvent({ commit }, event) {
+      return EventService.postEvent(event).then(() => {
+        commit("ADD_EVENT", event); // <-- add the event to the state events
+      });
+    },
+  },
 });
