@@ -20,24 +20,48 @@ export default new Vuex.Store({
       "community",
     ],
     events: [],
+    event: {},
+    eventsTotal: 0,
   },
   mutations: {
-    SET_EVENT(state, events) {
+    SET_EVENTS(state, events) {
       state.events = events;
+    },
+    SET_EVENT(state, event) {
+      state.event = event;
     },
     ADD_EVENT(state, event) {
       state.events.push(event);
     },
+    SET_EVENTSTOTAL(state, eventsTotal) {
+      state.eventsTotal = eventsTotal;
+    },
   },
   actions: {
-    fetchEvents({ commit }, {perPage, page}) {
+    fetchEvents({ commit }, { perPage, page }) {
       EventService.getEvents(perPage, page)
         .then((response) => {
-          commit("SET_EVENT", response.data); // <--- set the events data using mutation
+          commit('SET_EVENTSTOTAL', parseInt(response.headers['x-total-count'])); // <-- set the total count of events
+          commit("SET_EVENTS", response.data); // <--- set the events data using mutation
         })
         .catch((err) => {
           console.log("There was an error: ", err.response);
         });
+    },
+    fetchEvent({ commit, getters }, id) { // Send in the getters
+      const event = getters.getEventById(id); // See if we already have this event in our state's events
+      
+      if (event) { // If we do, set the event
+        commit('SET_EVENT', event);
+      } else { //// If not, get it with the API.
+        EventService.getEvent(id)
+          .then((response) => {
+            commit('SET_EVENT', response.data);
+          })
+          .catch((err) => {
+            console.log("There was an error: ", err.response);
+          });
+      }
     },
     createEvent({ commit }, event) {
       return EventService.postEvent(event).then(() => {
@@ -45,4 +69,9 @@ export default new Vuex.Store({
       });
     },
   },
+  getters: {
+    getEventById: state => (id) => {
+      return state.events.find(event => event.id === id);
+    }
+  }
 });

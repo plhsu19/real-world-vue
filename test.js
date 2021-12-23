@@ -1,1 +1,1 @@
-console.log(parseInt("3") || 1);
+console.log('10' >  3);
