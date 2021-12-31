@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1>Events Listing</h1>
-    <EventCard v-for="event in events" v-bind:key="event.id" :event="event" />
+    <h1>Events for {{user.user.name}}</h1>
+    <EventCard v-for="event in event.events" v-bind:key="event.id" :event="event" />
     <template v-if="page !== 1">
       <router-link
         :to="{
@@ -40,18 +40,19 @@ export default {
   created() {
     this.perPage = 3; // Setting perPage here and not in data means it won't be reactive.
     // We don't need it to be reactive, and this way our component has access to it.
-    this.$store.dispatch("fetchEvents", {
+    this.$store.dispatch("event/fetchEvents", {
       perPage: this.perPage,
       page: this.page,
     });
   },
   computed: {
-    ...mapState(["events", "eventsTotal"]),
+    ...mapState(["user", "event"]), // event here is mapped to our `event` module ...
+    // ...the state of the module `event` is also scoped under the event name
     page() {
       return this.$route.query.page || 1;
     },
     hasNextPage() {
-      return this.eventsTotal > this.page * this.perPage;
+      return this.event.eventsTotal > this.page * this.perPage;
     },
   },
 };
