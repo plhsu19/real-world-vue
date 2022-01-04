@@ -231,28 +231,6 @@
       "date": "",
       "time": "5:00",
       "attendees": []
-    },
-    {
-      "id": 1334465,
-      "category": "animal welfare",
-      "organizer": "Adam Jahr",
-      "title": "Owl Cafe Tour",
-      "description": "see cute owls",
-      "location": "Owl Cafe",
-      "date": "2021-12-24T12:09:00.000Z",
-      "time": "11:00",
-      "attendees": []
-    },
-    {
-      "id": 4075216,
-      "category": "nature",
-      "organizer": "Adam Jahr",
-      "title": "Hiking",
-      "description": "hiking in mount",
-      "location": "mount",
-      "date": "2021-12-09T12:13:00.000Z",
-      "time": "9:00",
-      "attendees": []
     }
   ]
 }
